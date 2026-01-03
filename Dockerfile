@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /usr/src/app
 
 # Copy manifests
-COPY Cargo.toml Cargo.lock ./
+COPY Cargo.toml ./
 
 # Create dummy source to cache dependencies
 RUN mkdir src && \
