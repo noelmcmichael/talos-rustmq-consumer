@@ -70,7 +70,7 @@ async fn main() -> Result<()> {
         for partition in 0..12 {
             let current_offset = partition_offsets[partition];
             
-            match consume_messages(&mut stream, partition, current_offset, 100).await {
+            match consume_messages(&mut stream, partition as u32, current_offset, 100).await {
                 Ok(messages) => {
                     if !messages.is_empty() {
                         batch_consumed += messages.len() as u64;
