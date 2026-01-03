@@ -75,6 +75,12 @@ async fn main() -> Result<()> {
                     if !messages.is_empty() {
                         batch_consumed += messages.len() as u64;
                         
+                        // Debug: Log partition progress
+                        if messages.len() > 0 && partition == 0 {
+                            info!("🔍 Partition {}: Read {} messages from offset {}", 
+                                partition, messages.len(), current_offset);
+                        }
+                        
                         // Process and classify messages
                         for msg in &messages {
                             let value_str = String::from_utf8_lossy(&msg.value);
@@ -111,6 +117,14 @@ async fn main() -> Result<()> {
                         
                         // Update offset for this partition
                         partition_offsets[partition] += messages.len() as u64;
+                        
+                        // Debug: Log offset update
+                        if partition == 0 && messages.len() > 0 {
+                            info!("🔍 Partition {}: New offset is {}", partition, partition_offsets[partition]);
+                        }
+                    } else if partition == 0 {
+                        // Debug: Log when partition returns empty
+                        info!("🔍 Partition {}: Empty response at offset {}", partition, current_offset);
                     }
                 }
                 Err(e) => {
